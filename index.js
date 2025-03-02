@@ -15,20 +15,23 @@ const colorToCoords = {
 
 // start of this taken from bloom
 register(MouseEvent, (event) => {
-    if (!Dungeon.inDungeon) return;
+    if (!World.isLoaded() || !Dungeon.inDungeon) return;
 
     const button = event.button;
     const state = event.buttonstate;
 
     // Only activate on a right click key press
     if (button !== 1 || !state) return;
-
+    console.log(Player.lookingAt()?.getState());
     relic(event);
-    icefill(event);
+    if (Player.isSneaking()) icefill(event);
 });
 
 const icefill = (event) => {
+    if (Player.getY() <= 68) return;
     if (World.getBlockAt(Math.floor(Player.getX()), Math.floor(Player.getY())-1, Math.floor(Player.getZ()))?.getState()  == "minecraft:ice") {
+        cancel(event);
+    } else if (World.getBlockAt(Math.floor(Player.getX()), Math.floor(Player.getY())-1, Math.floor(Player.getZ()))?.getState() == "minecraft:packed_ice" && (Player.lookingAt()?.getState() == "minecraft:stone[variant=smooth_andesite]" || Player.lookingAt()?.getState()?.includes("minecraft:cobblestone_wall") || Player.lookingAt()?.getState() == "minecraft:packed_ice")) {
         cancel(event);
     }
 }
