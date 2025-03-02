@@ -22,7 +22,6 @@ register(MouseEvent, (event) => {
 
     // Only activate on a right click key press
     if (button !== 1 || !state) return;
-    console.log(Player.lookingAt()?.getState());
     relic(event);
     if (Player.isSneaking()) icefill(event);
 });
